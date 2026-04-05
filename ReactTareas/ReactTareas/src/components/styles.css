@@ -1,0 +1,177 @@
+.todo-app {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 0 16px;
+    font-family: monospace;
+}
+
+.contadores {
+    color: #555;
+    font-size: 13px;
+}
+
+.error_agregar {
+    color: red;
+    font-size: 13px;
+}
+
+.pNo_tareas {
+    color: #888;
+}
+
+.keyClass {
+    margin-bottom: 10px;
+}
+
+.key_completado {
+    opacity: 0.5;
+}
+
+.text_completado {
+    text-decoration: line-through;
+}
+
+.descripcion {
+    color: #555;
+}
+
+
+.botonCustom{
+    font-size: 12px;
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    will-change: box-shadow,transform;
+    background: radial-gradient( 100% 100% at 100% 0%, #585858 0%, #2e2e2e 100% );
+    box-shadow: 0px 0.01em 0.01em rgb(45 35 66 / 40%), 0px 0.3em 0.7em -0.01em rgb(45 35 66 / 30%), inset 0px -0.01em 0px rgb(58 65 111 / 50%);
+    padding: 0 2em;
+    border-radius: 0.3em;
+    color: #fff;
+    height: 2.6em;
+    text-shadow: 0 1px 0 rgb(0 0 0 / 40%);
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.botonCustom:hover{
+    box-shadow: 0px 0.1em 0.2em rgb(45 35 66 / 40%), 0px 0.4em 0.7em -0.1em rgb(45 35 66 / 30%), inset 0px -0.1em 0px #686767;
+    transform: translateY(-0.1em);
+}
+
+.botonCustom:active{
+    box-shadow: inset 0px 0.1em 0.6em #494949;
+    transform: translateY(0em);
+}
+
+.botonCustomCompletar{
+    font-size: 10px;
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    will-change: box-shadow,transform;
+    background: radial-gradient( 100% 100% at 100% 0%, #9af592 0%, #187700 100% );
+    box-shadow: 0px 0.01em 0.01em rgb(45 35 66 / 40%), 0px 0.3em 0.7em -0.01em rgb(45 35 66 / 30%), inset 0px -0.01em 0px rgb(58 65 111 / 50%);
+    padding: 0 2em;
+    border-radius: 0.3em;
+    color: #fff;
+    height: 2.6em;
+    text-shadow: 0 1px 0 rgb(0 0 0 / 40%);
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.botonCustomCompletar:hover{
+    box-shadow: 0px 0.1em 0.2em rgb(45 35 66 / 40%), 0px 0.4em 0.7em -0.1em rgb(45 35 66 / 30%), inset 0px -0.1em 0px #686767;
+    transform: translateY(-0.1em);
+}
+
+.botonCustomCompletar:active{
+    box-shadow: inset 0px 0.1em 0.6em #494949;
+    transform: translateY(0em);
+}
+
+.botonCustomEliminar{
+    font-size: 10px;
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    will-change: box-shadow,transform;
+    background: radial-gradient( 100% 100% at 100% 0%, #ff3a3a 0%, #750000 100% );
+    box-shadow: 0px 0.01em 0.01em rgb(45 35 66 / 40%), 0px 0.3em 0.7em -0.01em rgb(45 35 66 / 30%), inset 0px -0.01em 0px rgb(58 65 111 / 50%);
+    padding: 0 2em;
+    border-radius: 0.3em;
+    color: #fff;
+    height: 2.6em;
+    text-shadow: 0 1px 0 rgb(0 0 0 / 40%);
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.botonCustomEliminar:hover{
+    box-shadow: 0px 0.1em 0.2em rgb(45 35 66 / 40%), 0px 0.4em 0.7em -0.1em rgb(45 35 66 / 30%), inset 0px -0.1em 0px #686767;
+    transform: translateY(-0.1em);
+}
+
+.botonCustomEliminar:active{
+    box-shadow: inset 0px 0.1em 0.6em #494949;
+    transform: translateY(0em);
+}
+
+.botonCustomCopiar{
+    font-size: 10px;
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    will-change: box-shadow,transform;
+    background: radial-gradient( 100% 100% at 100% 0%, #585858 0%, #2e2e2e 100% );
+    box-shadow: 0px 0.01em 0.01em rgb(45 35 66 / 40%), 0px 0.3em 0.7em -0.01em rgb(45 35 66 / 30%), inset 0px -0.01em 0px rgb(58 65 111 / 50%);
+    padding: 0 2em;
+    border-radius: 0.3em;
+    color: #fff;
+    height: 2.6em;
+    text-shadow: 0 1px 0 rgb(0 0 0 / 40%);
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.botonCustomCopiar:hover{
+    box-shadow: 0px 0.1em 0.2em rgb(45 35 66 / 40%), 0px 0.4em 0.7em -0.1em rgb(45 35 66 / 30%), inset 0px -0.1em 0px #686767;
+    transform: translateY(-0.1em);
+}
+
+.botonCustomCopiar:active{
+    box-shadow: inset 0px 0.1em 0.6em #494949;
+    transform: translateY(0em);
+}
+
+.customInput {
+    padding: 5px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #555;
+    outline: none;
+}
+
+.customInput:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.customInputSearch {
+    padding: 5px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #555;
+    outline: none;
+    margin-bottom: 10px;
+}
+
+.customInputSearch:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+
+

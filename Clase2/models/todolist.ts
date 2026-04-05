@@ -1,4 +1,4 @@
-import {Tarea, prioridad} from '../Interfaces/Tarea.interface.ts';
+    import {Tarea, prioridad} from '../../ReactTareas/ReactTareas/src/Interfaces/Tarea.interface.ts';
 let tareas:Tarea[] = [];
 
 function crearTarea(id: number,titulo: string, prioridad: prioridad, descripcion: string) :Tarea {

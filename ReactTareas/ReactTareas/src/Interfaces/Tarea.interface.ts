@@ -1,3 +1,5 @@
+export type prioridad = "baja" | "media" | "alta";
+
 export interface Tarea{
     id: number;
     titulo: string;
@@ -6,4 +8,4 @@ export interface Tarea{
     completada: boolean;
 }
 
-export type prioridad = "baja" | "media" | "alta";
+
