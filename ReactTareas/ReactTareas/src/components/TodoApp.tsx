@@ -1,6 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import type { Tarea, prioridad } from '../Interfaces/Tarea.interface';
 import './styles.css';
+
+interface FormData {
+  titulo: string;
+  prioridad: prioridad;
+  descripcion: string;
+}
 
 let proximoId = 4;
 
@@ -88,29 +95,40 @@ function buscarTareas(tareas: Tarea[], termino: string): Tarea[] {
 }
 
 export default function TodoApp() {
-  const [tareas, setTareas] = useState<Tarea[]>([
-    { id: 1, titulo: 'Prueba1', prioridad: 'baja', descripcion: '', completada: false },
-    { id: 2, titulo: 'Prueba2', prioridad: 'media', descripcion: '', completada: false },
-    { id: 3, titulo: 'Prueba3', prioridad: 'alta', descripcion: '', completada: false },
-  ]);
+  const [tareas, setTareas] = useState<Tarea[]>(() => {
+    const tareasGuardadas = localStorage.getItem('tareas');
+    if (tareasGuardadas) {
+      try {
+        return JSON.parse(tareasGuardadas);
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
 
-  const [titulo, setTitulo] = useState('');
-  const [p, setP] = useState<prioridad>('media');
-  const [descripcion, setDescripcion] = useState('');
-  const [errores, setErrores] = useState<string[]>([]);
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
+    defaultValues: {
+      titulo: '',
+      prioridad: 'media',
+      descripcion: ''
+    }
+  });
+
   const [termino, setTermino] = useState('');
   const [filtroEstado, setFiltroEstado] = useState<'todas' | 'completadas' | 'pendientes'>('todas');
   const [filtroPrioridad, setFiltroPrioridad] = useState<prioridad | 'todas'>('todas');
   const [ordenado, setOrdenado] = useState(false);
 
-  const agregar = () => {
-    const tarea = crearTarea(proximoId, titulo, p, descripcion);
-    const { esValida, errores: errs } = validarTarea(tarea);
-    if (!esValida) { setErrores(errs); return; }
+  useEffect(() => {
+    localStorage.setItem('tareas', JSON.stringify(tareas));
+  }, [tareas]);
+
+  const agregar = (data: FormData) => {
+    const tarea = crearTarea(proximoId, data.titulo, data.prioridad, data.descripcion);
     proximoId++;
-    setErrores([]);
     setTareas(prev => [...prev, tarea]);
-    setTitulo(''); setP('media'); setDescripcion('');
+    reset();
   };
 
   let lista = [...tareas];
@@ -132,17 +150,20 @@ export default function TodoApp() {
       <hr />
 
       <h4>Nueva tarea</h4>
-      <input className="customInput" placeholder="Título" value={titulo} onChange={e => setTitulo(e.target.value)} />{' '}
-      <select value={p} onChange={e => setP(e.target.value as prioridad)}>
-        <option value="alta">alta</option>
-        <option value="media">media</option>
-        <option value="baja">baja</option>
-      </select>
-      <br /><br />
-      <input className="customInput" placeholder="Descripción (opcional)" value={descripcion} onChange={e => setDescripcion(e.target.value)} />
-      <br /><br />
-      <button className="botonCustom" onClick={agregar}>Agregar</button>
-      {errores.length > 0 && <p className="error_agregar">{errores.join(' ')}</p>}
+      <form onSubmit={handleSubmit(agregar)}>
+        <input className="customInput" placeholder="Título" {...register('titulo', { required: 'El título es requerido.' })} />{' '}
+        <select {...register('prioridad')}>
+          <option value="alta">alta</option>
+          <option value="media">media</option>
+          <option value="baja">baja</option>
+        </select>
+        {errors.titulo && <p className="error_agregar">{errors.titulo.message}</p>}
+        <br /><br />
+        <input className="customInput" placeholder="Descripción" {...register('descripcion', { required: 'La descripción es requerida.' })} />
+        {errors.descripcion && <p className="error_agregar">{errors.descripcion.message}</p>}
+        <br /><br />
+        <button className="botonCustom" type="submit">Agregar</button>
+      </form>
 
       <hr />
 
