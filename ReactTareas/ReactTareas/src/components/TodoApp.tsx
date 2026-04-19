@@ -1,27 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import type { Tarea, prioridad } from '../Interfaces/Tarea.interface';
+import TodoForm from './TodoForm';
+import type { FormData } from './TodoForm';
+import TodoFilters from './TodoFilters';
+import TodoList from './TodoList';
 import './styles.css';
-
-interface FormData {
-  titulo: string;
-  prioridad: prioridad;
-  descripcion: string;
-}
 
 let proximoId = 4;
 
 function crearTarea(id: number, titulo: string, p: prioridad, descripcion: string): Tarea {
   return { id, titulo, prioridad: p, descripcion, completada: false };
-}
-
-function validarTarea(tarea: Tarea): { esValida: boolean; errores: string[] } {
-  const errores: string[] = [];
-  if (typeof tarea.titulo !== 'string' || tarea.titulo.trim() === '')
-    errores.push('El título es requerido y debe ser texto.');
-  if (!['alta', 'media', 'baja'].includes(tarea.prioridad))
-    errores.push("La prioridad debe ser 'alta', 'media' o 'baja'.");
-  return { esValida: errores.length === 0, errores };
 }
 
 function buscarTarea(tareas: Tarea[], id: number): Tarea | undefined {
@@ -107,14 +95,6 @@ export default function TodoApp() {
     return [];
   });
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
-    defaultValues: {
-      titulo: '',
-      prioridad: 'media',
-      descripcion: ''
-    }
-  });
-
   const [termino, setTermino] = useState('');
   const [filtroEstado, setFiltroEstado] = useState<'todas' | 'completadas' | 'pendientes'>('todas');
   const [filtroPrioridad, setFiltroPrioridad] = useState<prioridad | 'todas'>('todas');
@@ -128,8 +108,11 @@ export default function TodoApp() {
     const tarea = crearTarea(proximoId, data.titulo, data.prioridad, data.descripcion);
     proximoId++;
     setTareas(prev => [...prev, tarea]);
-    reset();
   };
+
+  const completar = (id: number) => setTareas(prev => completarTarea(prev, id));
+  const eliminar = (id: number) => setTareas(prev => eliminarTarea(prev, id));
+  const copiar = (id: number) => setTareas(prev => copiarTarea(prev, id));
 
   let lista = [...tareas];
   if (termino) lista = buscarTareas(lista, termino);
@@ -149,59 +132,24 @@ export default function TodoApp() {
 
       <hr />
 
-      <h4>Nueva tarea</h4>
-      <form onSubmit={handleSubmit(agregar)}>
-        <input className="customInput" placeholder="Título" {...register('titulo', { required: 'El título es requerido.' })} />{' '}
-        <select {...register('prioridad')}>
-          <option value="alta">alta</option>
-          <option value="media">media</option>
-          <option value="baja">baja</option>
-        </select>
-        {errors.titulo && <p className="error_agregar">{errors.titulo.message}</p>}
-        <br /><br />
-        <input className="customInput" placeholder="Descripción" {...register('descripcion', { required: 'La descripción es requerida.' })} />
-        {errors.descripcion && <p className="error_agregar">{errors.descripcion.message}</p>}
-        <br /><br />
-        <button className="botonCustom" type="submit">Agregar</button>
-      </form>
+      <TodoForm onAdd={agregar} />
 
       <hr />
 
-      <h4>Filtros</h4>
-      <input className="customInputSearch" placeholder="Buscar..." value={termino} onChange={e => setTermino(e.target.value)} />{' '}
-      <select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value as typeof filtroEstado)}>
-        <option value="todas">todas</option>
-        <option value="pendientes">pendientes</option>
-        <option value="completadas">completadas</option>
-      </select>{' '}
-      <select value={filtroPrioridad} onChange={e => setFiltroPrioridad(e.target.value as typeof filtroPrioridad)}>
-        <option value="todas">toda prioridad</option>
-        <option value="alta">alta</option>
-        <option value="media">media</option>
-        <option value="baja">baja</option>
-      </select>{' '}
-      <button className="botonCustom" onClick={() => setOrdenado(o => !o)}>
-        {ordenado ? 'Orden original' : 'Ordenar por prioridad'}
-      </button>
+      <TodoFilters
+        termino={termino}
+        onTerminoChange={setTermino}
+        filtroEstado={filtroEstado}
+        onFiltroEstadoChange={setFiltroEstado}
+        filtroPrioridad={filtroPrioridad}
+        onFiltroPrioridadChange={setFiltroPrioridad}
+        ordenado={ordenado}
+        onToggleOrdenado={() => setOrdenado(o => !o)}
+      />
 
       <hr />
 
-      <h4>Tareas ({lista.length})</h4>
-      {lista.length === 0 && <p className="pNo_tareas">No hay tareas.</p>}
-      {lista.map(t => (
-        <div key={t.id} className={`keyClass ${t.completada ? 'key_completado' : ''}`}>
-          <span className={t.completada ? 'text_completado' : ''}>
-            <strong>{t.titulo}</strong> [{t.prioridad}]
-            {t.descripcion && <span className="descripcion"> — {t.descripcion}</span>}
-          </span>
-          <br />
-          <button className="botonCustomCompletar" onClick={() => setTareas(completarTarea(tareas, t.id))} disabled={t.completada}>
-            {t.completada ? 'Completada' : 'Completar'}
-          </button>{' '}
-          <button className="botonCustomEliminar" onClick={() => setTareas(eliminarTarea(tareas, t.id))}>Eliminar</button>{' '}
-          <button className="botonCustomCopiar" onClick={() => setTareas(copiarTarea(tareas, t.id))}>Copiar</button>
-        </div>
-      ))}
+      <TodoList tareas={lista} onComplete={completar} onDelete={eliminar} onCopy={copiar} />
     </div>
   );
 }
